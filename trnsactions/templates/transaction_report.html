@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{%block head_title%}{{title}}{%endblock%}
+{% block content %}
+{% load humanize %}
+<div class="my-10 py-3 px-4 bg-white rounded-xl shadow-md">
+    <h1 class="font-bold text-3xl text-center pb-5 pt-2">Transaction Report</h1>
+    <hr />
+    <form method="get" action="{% url 'transaction_report' %}">
+      <div class="flex justify-center">
+        <div
+          class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12 mx-2"
+        >
+          <label for="start_date">From:</label>
+          <input
+            class="appearance-none w-full outline-none focus:outline-none active:outline-none"
+            type="date"
+            id="start_date"
+            name="start_date"
+          />
+        </div>
+   
+        <div
+          class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12"
+        >
+          <label for="end_date">To:</label>
+          <input
+            class="appearance-none w-full outline-none focus:outline-none active:outline-none"
+            type="date"
+            id="end_date"
+            name="end_date"
+          />
+        </div>
+        <div class="mt-10 pl-3 pr-2 flex justify-between items-center relative w-4/12">
+          <button
+            class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Filter
+          </button>
+        </div>
+      </div>
+    </form>
+
+
+<table class="table bg-black">
+    <thead class="bg-blue-300">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Transaction Type</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Balance After Transaction</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {%for transaction in object_list%}
+        <td>{{ transaction.timestamp|date:"F d, Y h:i A" }}</td>
+        <td>
+            <span
+            class="px-2 py-1 font-bold leading-tight rounded-sm {% if transaction.get_transaction_type_display == 'Withdraw' %} text-red-700 bg-red-100 {% else %} text-green-700 bg-green-100 {% endif %}"
+          >
+            {{ transaction.get_transaction_type_display }}
+          </span>
+
+        </td>
+        <td>{{ transaction.amount|intcomma }}</td>
+        <td>{{ transaction.balance_afet_transaction|intcomma }}</td>
+      </tr>
+      
+      {%endfor%}
+    </tbody>
+    
+  </table>
+  <h1 class="text-center text-bg-green-700 font-bold">Total balance: {{request.user.account.balance}} </h1>
+{% endblock %}
