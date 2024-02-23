@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 import environ
 env = environ.Env()
 environ.Env.read_env()
@@ -94,18 +95,24 @@ WSGI_APPLICATION = 'bank_of_future.wsgi.application'
 # Your secret key
 SECRET_KEY = env("SECRET_KEY")
 ...
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env("DB_NAME"),
+#         'USER': env("DB_USER"),
+#         'PASSWORD': env("DB_PASSWORD"),
+#         'HOST': env("DB_HOST"),
+#         'PORT': env("DB_PORT"),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASSWORD"),
-        'HOST': env("DB_HOST"),
-        'PORT': env("DB_PORT"),
-    }
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgres://bankoffuture_user:Dfb3f7wz4qREHvYynHTj7QjQI5o8JwWd@dpg-cnc56gn79t8c73eqcic0-a.oregon-postgres.render.com/bankoffuture',
+       
+    )
 }
-
-
 
 
 # Password validation
